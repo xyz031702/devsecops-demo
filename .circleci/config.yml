@@ -1,5 +1,11 @@
 version: 2.1
 
+# Global environment variables
+parameters:
+  sca_bom_detect_download_url:
+    type: string
+    default: "https://download.scantist.io/sca-bom-detect.jar"
+
 orbs:
   sca: scan/sca@0.0.11
 
@@ -33,3 +39,7 @@ workflows:
           requires:
             - build
           context: scantist-security
+          environment:
+            SCA_BOM_DETECT_DOWNLOAD_URL: << pipeline.parameters.sca_bom_detect_download_url >>
+            DEVSECOPS_TOKEN: ${DEVSECOPS_TOKEN}
+            DEVSECOPS_IMPORT_URL: ${DEVSECOPS_IMPORT_URL}
