@@ -1,5 +1,18 @@
 version: 2.1
 
+# Include the SCA template from devsecops-templates
+setup: true
+
+orbs: {}
+
+commands: {}
+
+# Reference external template
+import:
+  - url: https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/circle-ci/config.yml
+    as: sca-template
+
+# Define jobs
 jobs:
   build:
     docker:
@@ -22,6 +35,15 @@ jobs:
 
 workflows:
   version: 2
-  build-workflow:
+  build-test-workflow:
     jobs:
       - build
+      # Use the SCA scan job from the imported template
+      - sca-template/sca-scan:
+          requires:
+            - build
+          # Define environment variables
+          environment:
+            SCA_BOM_DETECT_DOWNLOAD_URL: https://download.scantist.io/sca-bom-detect.jar
+            DEVSECOPS_TOKEN: ${DEVSECOPS_TOKEN}
+            DEVSECOPS_IMPORT_URL: ${DEVSECOPS_IMPORT_URL}
