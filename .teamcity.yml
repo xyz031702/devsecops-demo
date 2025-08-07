@@ -8,6 +8,7 @@ jobs:
         script-content: |
           yarn install --frozen-lockfile
           yarn build
+          echo "Hello world"
         docker-image: node:18
     artifacts:
       paths:
