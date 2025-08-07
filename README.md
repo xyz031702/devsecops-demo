@@ -51,4 +51,4 @@ This demo currently supports the following CI/CD platforms:
 
 ## License
 
-MIT License - This is a demonstration project for educational purposes.
+MIT License - This is a demonstration project for educational purposes..
