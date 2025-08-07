@@ -30,8 +30,7 @@ workflows:
     jobs:
       - build
       # Use the scan-sca orb for SCA scanning
-      - scan-sca/scan:
+      - scan-sca/sca-scan:  # Changed from 'scan' to 'sca-scan'
           requires:
             - build
           context: scantist-security
-          sca_bom_detect_download_url: https://download.scantist.io/sca-bom-detect.jar
