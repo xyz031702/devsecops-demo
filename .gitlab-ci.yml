@@ -1,0 +1,23 @@
+# Include SCA scanning template
+include:
+  - remote: 'https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/gitlab-ci/bom-sca-scan.yml'
+
+stages:
+  - build
+  - test
+
+variables:
+  SCA_BOM_DETECT_DOWNLOAD_URL: "https://download.scantist.io/sca-bom-detect.jar"
+  DEVSECOPS_TOKEN: "${DEVSECOPS_TOKEN}"
+  DEVSECOPS_IMPORT_URL: "${DEVSECOPS_IMPORT_URL}"
+
+build:
+  stage: build
+  image: node:18
+  script:
+    - yarn install --frozen-lockfile   # install deps
+    - yarn build                       # compile to dist/
+  artifacts:
+    paths:
+      - dist/                          # keep compiled JS
+    expire_in: 1 week
