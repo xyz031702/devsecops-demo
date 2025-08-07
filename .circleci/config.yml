@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  sca: scan/sca@0.0.13
+  sca: scan/sca@0.0.14
 
 # Define jobs
 jobs:
