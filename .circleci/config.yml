@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  scan-sca: scan/sca@0.0.9
+  sca: scan/sca@0.0.9
 
 # Define jobs
 jobs:
@@ -29,8 +29,7 @@ workflows:
   build-test-workflow:
     jobs:
       - build
-      # Use the scan-sca orb for SCA scanning
-      - scan-sca/sca-scan:  # Changed from 'scan' to 'sca-scan'
+      - sca/sca-scan:
           requires:
             - build
           context: scantist-security
