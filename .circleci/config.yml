@@ -39,7 +39,5 @@ workflows:
           requires:
             - build
           context: scantist-security
-          environment:
-            SCA_BOM_DETECT_DOWNLOAD_URL: << pipeline.parameters.sca_bom_detect_download_url >>
-            DEVSECOPS_TOKEN: ${DEVSECOPS_TOKEN}
-            DEVSECOPS_IMPORT_URL: ${DEVSECOPS_IMPORT_URL}
+          # Pass parameters directly to the orb job
+          sca_bom_detect_download_url: << pipeline.parameters.sca_bom_detect_download_url >>
