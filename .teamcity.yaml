@@ -1,0 +1,14 @@
+name: DevSecOps Demo
+
+jobs:
+  build:
+    runs-on: Linux-Medium
+    steps:
+      - type: script           # install + build in one step
+        script-content: |
+          yarn install --frozen-lockfile
+          yarn build
+        docker-image: node:18
+    artifacts:
+      paths:
+        - dist/** => dist.zip
