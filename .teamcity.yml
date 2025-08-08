@@ -22,22 +22,17 @@ jobs:
         source-paths:
           - dist/**
     
-    env:
-      SCA_BOM_DETECT_DOWNLOAD_URL: "https://download.scantist.io/sca-bom-detect.jar"
-      DEVSECOPS_TOKEN: "${DEVSECOPS_TOKEN}"
-      DEVSECOPS_IMPORT_URL: "${DEVSECOPS_IMPORT_URL}"
-      SCA_PLUGIN_DIR: ".scantist"
-      SCA_REPORT_DIR: "devsecops_report"
+    # env:
+    #   SCA_BOM_DETECT_DOWNLOAD_URL: "https://download.scantist.io/sca-bom-detect.jar"
+    #   DEVSECOPS_TOKEN: "${DEVSECOPS_TOKEN}"
+    #   DEVSECOPS_IMPORT_URL: "${DEVSECOPS_IMPORT_URL}"
+    #   SCA_PLUGIN_DIR: ".scantist"
+    #   SCA_REPORT_DIR: "devsecops_report"
     
     steps:
       - type: script
-        name: Install Dependencies
+        name: SCA Scan
         script-content: |
-          echo "📦 Installing required dependencies..."
-          apt-get update
-          apt-get install -y curl openjdk-11-jre-headless
-          echo "✅ Dependencies installed successfully"
-
           echo "🔍 Starting Scantist SCA scan..."
           
           # Validate DevSecOps token is provided
@@ -51,7 +46,7 @@ jobs:
           if [[ ! -f "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}" ]]; then
             echo "[SCA] Downloading SCA detector..."
             mkdir -p "${SCA_PLUGIN_DIR}"
-            curl -L "${SCA_BOM_DETECT_DOWNLOAD_URL}" -o "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}"
+            curl -L "https://download.scantist.io/sca-bom-detect.jar" -o "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}"
             echo "[SCA] Download completed"
           fi
           
