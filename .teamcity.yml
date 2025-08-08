@@ -5,6 +5,29 @@ jobs:
     steps:
       - type: script           # install + build in one step
         script-content: |
+          # Install Node.js 18.x and Yarn
+          echo "Installing Node.js 18.x and latest Yarn..."
+          apt-get update
+          apt-get install -y curl wget gnupg ca-certificates
+          mkdir -p /etc/apt/keyrings
+          curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+          apt-get update
+          apt-get install -y nodejs
+          npm install -g yarn
+          
+          # Install Java for SCA scanning
+          echo "Installing Java 11..."
+          apt-get install -y openjdk-11-jdk
+          
+          # Verify installations
+          echo "Verifying installations:"
+          node --version
+          yarn --version
+          java -version
+          
+          # Build application
+          echo "Building application..."
           yarn install --frozen-lockfile
           yarn build
           
@@ -35,10 +58,10 @@ jobs:
           java -jar "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}" -f "%teamcity.build.checkoutDir%" --debug -report json
           
           echo "[SCA] Scan completed. Reports in: ${SCA_REPORT_DIR}"
-        docker-image: wynventory/maven-node-yarn
+        docker-image: ubuntu:22.04
     artifacts:
       paths:
         - dist/** => dist.zip
-        - devsecops_report/** => devsecops_report.zip
+        - devsecops_report/** => sca-reports.zip
 
   # The bom-sca-scan job has been merged into the build job for simplicity
