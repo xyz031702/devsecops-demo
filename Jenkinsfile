@@ -1,3 +1,19 @@
+// NOTE: This script requires Jenkins Script Security approval in the Jenkins settings
+// External scripts loaded with 'load' need to be approved in Jenkins Script Security configuration
+//
+// How to approve scripts in Jenkins:
+// 1. Go to Jenkins Dashboard
+// 2. Navigate to 'Manage Jenkins' > 'In-process Script Approval'
+// 3. Look for pending scripts or signatures
+// 4. Click 'Approve' for the scaScan.groovy script and any other related signatures
+// 5. Re-run the pipeline after approving
+//
+// Alternative solution:
+// You can download the template locally and include it in your repository to avoid script security issues:
+// 1. Download the script from: https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy
+// 2. Save it to your repository as 'scaScan.groovy'
+// 3. Update the pipeline to use the local version instead of downloading it
+
 pipeline {
   agent any
 
@@ -65,7 +81,7 @@ pipeline {
       steps {
         script {
           sh '''
-            curl -fsSL https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/bom-sca-scan.jenkinsfile -o scaScan.groovy
+            curl -fsSL https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy -o scaScan.groovy
           '''
           def sca = load 'scaScan.groovy'
           sca.scaScan()
