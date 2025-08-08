@@ -13,6 +13,19 @@
 // 1. Download the script from: https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy
 // 2. Save it to your repository as 'scaScan.groovy'
 // 3. Update the pipeline to use the local version instead of downloading it
+//
+// Setting up secrets in Jenkins:
+// 1. Go to Jenkins Dashboard
+// 2. Navigate to 'Manage Jenkins' > 'Manage Credentials'
+// 3. Click on the appropriate domain (usually 'Jenkins')
+// 4. Click 'Add Credentials' to create each of these required secrets:
+//    - SCA_BOM_DETECT_DOWNLOAD_URL: URL for downloading the SCA BOM detection tool
+//    - DEVSECOPS_TOKEN: API token for DevSecOps services
+//    - DEVSECOPS_IMPORT_URL: URL for importing scan results
+// 5. Select 'Secret text' as the kind for each credential
+// 6. Enter the ID exactly as referenced in the Jenkinsfile (e.g., 'DEVSECOPS_TOKEN')
+// 7. Provide the secret value and an optional description
+// 8. Click 'OK' to save each credential
 
 pipeline {
   agent any
