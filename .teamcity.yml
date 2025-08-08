@@ -39,13 +39,15 @@ jobs:
           SCA_REPORT_DIR="devsecops_report"
           SCA_JAR_NAME="sca-bom-detect.jar"
           
-          # Download SCA detector if not exists
-          if [[ ! -f "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}" ]]; then
-            echo "[SCA] Downloading SCA detector..."
-            mkdir -p "${SCA_PLUGIN_DIR}"
-            curl -L "https://download.scantist.io/sca-bom-detect.jar" -o "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}"
-            echo "[SCA] Download completed"
-          fi
+          # Download SCA detector (always download to ensure we have it)
+          echo "[SCA] Downloading SCA detector..."
+          mkdir -p "${SCA_PLUGIN_DIR}"
+          curl -L "https://download.scantist.io/sca-bom-detect.jar" -o "${SCA_PLUGIN_DIR}/${SCA_JAR_NAME}"
+          echo "[SCA] Download completed"
+          
+          # Verify download
+          echo "[SCA] Verifying download..."
+          ls -la "${SCA_PLUGIN_DIR}/"
           
           # Create report directory
           mkdir -p "${SCA_REPORT_DIR}"
