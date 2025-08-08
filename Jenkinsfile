@@ -64,13 +64,11 @@ pipeline {
     stage('SCA Scan') {
       steps {
         script {
-          def resp = httpRequest(
-            url: 'https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy',
-            validResponseCodes: '200'
-          )
-          writeFile file: 'scaScan.groovy', text: resp.content
+          sh '''
+            curl -fsSL https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy -o scaScan.groovy
+          '''
           def sca = load 'scaScan.groovy'
-          sca.scaScan()           // runs with secrets from Jenkins credentials
+          sca.scaScan()
         }
       }
     }
