@@ -49,6 +49,30 @@ This demo currently supports the following CI/CD platforms:
 | `DEVSECOPS_IMPORT_URL` | Endpoint for importing scan results | Optional |
 | `SCA_BOM_DETECT_DOWNLOAD_URL` | URL to download SCA scanner | Yes |
 
+## Jenkins Setup
+
+1. **Start Jenkins locally** using Docker:
+   ```bash
+   ./ci-templates/jenkins/start-jenkins.sh
+   ```
+
+2. **Access Jenkins** at http://localhost:8080
+
+3. **Create Pipeline Job:**
+   - Create a new Pipeline job
+   - Select "Pipeline script from SCM" as the definition
+   - Choose Git as SCM and enter repository URL
+   - Set branch specifier and script path to "Jenkinsfile"
+
+4. **Configure Credentials:**
+   - Go to Manage Jenkins → Credentials
+   - Add Secret Text credentials with IDs:
+     - `DEVSECOPS_TOKEN`
+     - `DEVSECOPS_IMPORT_URL` (if needed)
+     - `SCA_BOM_DETECT_DOWNLOAD_URL`
+
+5. **Run Build** by clicking "Build Now"
+
 ## License
 
 MIT License - This is a demonstration project for educational purposes..
