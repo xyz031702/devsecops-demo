@@ -18,32 +18,69 @@ jobs:
     
     steps:
       - type: script
-        name: Simple SCA Scan
+        name: Diagnostic SCA Scan
         script-content: |
-          echo "🔍 Starting simplified Scantist SCA scan..."
+          echo "Starting diagnostics and simplified Scantist SCA scan..."
+          
+          # Print environment details for debugging
+          echo "--- Agent Environment Info ---"
+          echo "OS:" $(uname -a || echo "Unknown")
+          echo "Java:" $(java -version 2>&1 || echo "Not installed")
+          echo "Working directory:" $(pwd)
+          echo "TeamCity checkout dir: %teamcity.build.checkoutDir%"
+          
+          # List available tools
+          echo "\n--- Available Tools ---"
+          echo "curl:" $(which curl || echo "Not found")
+          echo "wget:" $(which wget || echo "Not found")
           
           # Create directories
+          echo "\n--- Setup ---"
           mkdir -p .scantist
           mkdir -p devsecops_report
+          echo "Directories created"
           
           # Check for parameters
           if [ -z "%SCA_BOM_DETECT_DOWNLOAD_URL%" ]; then
-            echo "⚠️ Warning: SCA_BOM_DETECT_DOWNLOAD_URL not set"
-            echo "Scan skipped. Please configure required parameters in TeamCity."
-            exit 0
-          fi
-          
-          # Download scanner - no Docker needed
-          echo "Downloading SCA detector..."
-          curl -L -o ".scantist/sca-bom-detect.jar" "%SCA_BOM_DETECT_DOWNLOAD_URL%" || echo "Download failed"
-          
-          # Simple check if Java is available
-          if command -v java >/dev/null 2>&1; then
-            echo "Running scan with available Java..."
-            java -jar ".scantist/sca-bom-detect.jar" -f "%teamcity.build.checkoutDir%" -report json || echo "Scan failed"
+            echo "Warning: SCA_BOM_DETECT_DOWNLOAD_URL parameter not set"
+            echo "This is required for downloading the scanner"
+            echo "Please configure this parameter in TeamCity project settings"
+            echo "Continuing with limited functionality..."
           else
-            echo "Java not found. Scan skipped."
-            echo "Make sure Java is available on the build agent."
+            echo "SCA_BOM_DETECT_DOWNLOAD_URL is configured"
+            
+            # Try downloading with curl
+            echo "\n--- Downloading Scanner ---"
+            echo "Attempting to download scanner using curl..."
+            curl -L -o ".scantist/sca-bom-detect.jar" "%SCA_BOM_DETECT_DOWNLOAD_URL%" || {
+              echo "Curl download failed, trying wget..."
+              wget -O ".scantist/sca-bom-detect.jar" "%SCA_BOM_DETECT_DOWNLOAD_URL%" || {
+                echo "Both download methods failed"
+              }
+            }
+            
+            # Check if download succeeded
+            if [ -f ".scantist/sca-bom-detect.jar" ]; then
+              echo "Scanner downloaded successfully"
+              
+              # Check for Java
+              echo "\n--- Running Scan ---"
+              if command -v java >/dev/null 2>&1; then
+                echo "Java is available: $(java -version 2>&1 | head -1)"
+                echo "Attempting scan..."
+                java -jar ".scantist/sca-bom-detect.jar" -f "%teamcity.build.checkoutDir%" -report json || echo "Scan execution failed"
+              else
+                echo "Java is not installed on this agent"
+                echo "Cannot run the scanner without Java"
+              fi
+            else
+              echo "Scanner download failed. Cannot proceed with scan."
+            fi
           fi
           
-          echo "SCA step completed"
+          echo "\n--- Summary ---"
+          echo "SCA step completed with diagnostic information"
+          echo "Check the logs above for details on any issues"
+          
+          # Always exit with success to not fail the build
+          exit 0
