@@ -111,5 +111,3 @@ jobs:
 secrets:
   DEVSECOPS_TOKEN: credentialsJSON:72f8fac4-dd5e-4d7a-aba7-6784a1b85f03
   DEVSECOPS_IMPORT_URL: credentialsJSON:6ef246d2-7bf1-44e8-bd8b-1f0de7d4caa1
-parameters:
-  DEVSECOPS: a8ee843f-1eb5-4bbe-b827-7e931017464b
