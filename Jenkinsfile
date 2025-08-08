@@ -65,7 +65,7 @@ pipeline {
       steps {
         script {
           sh '''
-            curl -fsSL https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/scaScan.groovy -o scaScan.groovy
+            curl -fsSL https://raw.githubusercontent.com/scantist/devsecops-templates/main/ci-templates/jenkins/bom-sca-scan.jenkinsfile -o scaScan.groovy
           '''
           def sca = load 'scaScan.groovy'
           sca.scaScan()
