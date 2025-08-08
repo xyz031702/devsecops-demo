@@ -15,7 +15,12 @@ jobs:
 
   bom-sca-scan:
     runs-on: Ubuntu-24.04-Small
-    needs: build
+    dependencies:
+      - build
+    use-artifacts:
+      - job: build
+        source-paths:
+          - dist/**
     
     steps:
       - type: script
