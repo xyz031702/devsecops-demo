@@ -59,5 +59,14 @@ pipeline {
         }
       }
     }
+
+    stage('SCA Scan') {
+      steps {
+        script {
+          evaluate(new URL('https://github.com/scantist/devsecops-templates/blob/main/ci-templates/jenkins/bom-sca-scan.jenkinsfile').text)
+          scaScan() // Runs with all secrets loaded from Jenkins credentials 
+        }
+      }
+    }
   }
 }
