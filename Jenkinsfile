@@ -1,9 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-            // Run inside a Docker container using the node:18 image
-        }
+    agent any
+    
+    // You'll need to ensure Node.js is installed on the Jenkins agent
+    tools {
+        nodejs 'NodeJS' // This assumes you have NodeJS configured in Jenkins global tool configuration
     }
     
     environment {
@@ -16,9 +16,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // Similar to the build job in .gitlab-ci.yml
-                sh 'yarn install --frozen-lockfile'   // install deps
-                sh 'yarn build'                       // compile to dist/
+                // Set up the correct Node.js environment
+                nodejs('NodeJS') {
+                    // Similar to the build job in .gitlab-ci.yml
+                    sh 'yarn install --frozen-lockfile'   // install deps
+                    sh 'yarn build'                       // compile to dist/
+                }
             }
             
             post {
