@@ -1,11 +1,6 @@
 pipeline {
     agent any
     
-    // You'll need to ensure Node.js is installed on the Jenkins agent
-    tools {
-        nodejs 'NodeJS' // This assumes you have NodeJS configured in Jenkins global tool configuration
-    }
-    
     environment {
         // Define environment variables similar to GitLab CI
         SCA_BOM_DETECT_DOWNLOAD_URL = 'https://download.scantist.io/sca-bom-detect.jar'
@@ -14,6 +9,40 @@ pipeline {
     }
     
     stages {
+        stage('Setup') {
+            steps {
+                // Use nvm to install Node.js locally for the Jenkins user
+                sh '''
+                    # Install nvm if not available
+                    export NVM_DIR="$HOME/.nvm"
+                    if [ ! -d "$NVM_DIR" ]; then
+                        echo "Installing nvm..."
+                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+                    fi
+                    
+                    # Load nvm
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    
+                    # Install Node.js if not already installed
+                    if ! command -v node &> /dev/null || [ "$(node --version | cut -d. -f1 | tr -d 'v')" -lt 18 ]; then
+                        echo "Installing Node.js 18..."
+                        nvm install 18
+                        nvm use 18
+                    fi
+                    
+                    # Install yarn
+                    if ! command -v yarn &> /dev/null; then
+                        echo "Installing Yarn..."
+                        npm install -g yarn
+                    fi
+                    
+                    # Display versions
+                    echo "Node.js version: $(node --version)"
+                    echo "Yarn version: $(yarn --version)"
+                '''
+            }
+        }
+        
         stage('Build') {
             steps {
                 // Set up the correct Node.js environment
