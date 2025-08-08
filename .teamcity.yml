@@ -61,9 +61,5 @@ jobs:
           
           echo "[SCA] Scan completed. Reports in: ${SCA_REPORT_DIR}"
         docker-image: ubuntu:22.04
-    artifacts:
-      paths:
-        - dist/** => dist.zip
-        - devsecops_report/** => sca-reports.zip
 
   # The bom-sca-scan job has been merged into the build job for simplicity
