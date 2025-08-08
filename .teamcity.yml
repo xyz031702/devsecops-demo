@@ -1,7 +1,7 @@
 
 jobs:
   build:
-    runs-on: Default
+    runs-on: Ubuntu-24.04-Small
     steps:
       - type: script           # install + build in one step
         script-content: |
@@ -14,7 +14,7 @@ jobs:
         - dist/** => dist.zip
 
   bom-sca-scan:
-    runs-on: Default
+    runs-on: Ubuntu-24.04-Small
     
     steps:
       - type: script
