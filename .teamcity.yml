@@ -2,7 +2,7 @@ name: DevSecOps Demo
 
 jobs:
   build:
-    runs-on: Linux-Small
+    runs-on: Default
     steps:
       - type: script           # install + build in one step
         script-content: |
@@ -15,7 +15,7 @@ jobs:
         - dist/** => dist.zip
 
   bom-sca-scan:
-    runs-on: Linux-Small
+    runs-on: Default
     
     env:
       SCA_BOM_DETECT_JAR: "sca-bom-detect.jar"
