@@ -42,12 +42,8 @@ jobs:
             echo "Running scan with available Java..."
             java -jar ".scantist/sca-bom-detect.jar" -f "%teamcity.build.checkoutDir%" -report json || echo "Scan failed"
           else
-            echo "⚠️ Java not found. Scan skipped."
+            echo "Java not found. Scan skipped."
             echo "Make sure Java is available on the build agent."
           fi
           
-          echo "✅ SCA step completed"
-    
-    artifacts:
-      paths:
-        - "devsecops_report/**" => sca-reports.zip
+          echo "SCA step completed"
